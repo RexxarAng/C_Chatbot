@@ -11,10 +11,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "chat1002.h"
 
 /* word delimiters */
 const char *delimiters = " ?\t\n";
+
+
+/* function for waiting for number of seconds */
+void delay(int number_of_seconds) {
+	int milli_seconds = 1000 * number_of_seconds;
+	clock_t start_time = clock();
+	while (clock() < start_time + milli_seconds);
+}
 
 
 /*
@@ -28,6 +37,7 @@ int main(int argc, char *argv[]) {
 	char output[MAX_RESPONSE];  /* the chatbot's output */
 	int len;                    /* length of a word */
 	int done = 0;               /* set to 1 to end the main loop */
+	char username[MAX_INPUT];	/* buffer for username */
 
 	/* initialise the chatbot */
 	inv[0] = "reset";
@@ -36,6 +46,19 @@ int main(int argc, char *argv[]) {
 
 	/* print a welcome message */
 	printf("%s: Hello, I'm %s.\n", chatbot_botname(), chatbot_botname());
+	delay(1);
+	printf("%s: May I know what is your name?\n", chatbot_botname());
+	delay(1);
+	printf("%s: ", chatbot_username());
+	fgets(username, MAX_INPUT, stdin);
+	/* Check if \n exist in string*/
+	char* ptr = strchr(username, '\n');
+	if (ptr)
+	{
+		*ptr = '\0';
+	}
+	chatbot_set_username(username);
+	printf("%s: Nice to meet you %s, how can i help you?\n", chatbot_botname(), chatbot_username());
 
 	/* main command loop */
 	do {

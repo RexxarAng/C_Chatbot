@@ -44,6 +44,8 @@
 #include <string.h>
 #include "chat1002.h"
 
+char* smalltalk[] = { "hello", "yo", "hi", "oi", "hiya", "heyyo", "greetings", "hey", "wassup", "moshi", "ohaiyo", "konichiwa"};
+char username[MAX_INPUT] = "Me";
 
 /*
  * Get the name of the chatbot.
@@ -52,9 +54,15 @@
  */
 const char *chatbot_botname() {
 
-	return "Chatbot";
+	return "Chappie";
 
 }
+
+char* chatbot_set_username(char *name) {
+	strcpy(username, name);
+}
+
+
 
 
 /*
@@ -64,7 +72,7 @@ const char *chatbot_botname() {
  */
 const char *chatbot_username() {
 
-	return "User";
+	return username;
 
 }
 
@@ -307,9 +315,11 @@ int chatbot_do_save(int inc, char *inv[], char *response, int n) {
  *  0, otherwise
  */
 int chatbot_is_smalltalk(const char *intent) {
-
-	/* to be implemented */
-
+	size_t smalltalk_length = sizeof(smalltalk) / sizeof(smalltalk[0]);
+	for (int i = 0; i < smalltalk_length; i++) {
+		if (compare_token(intent, smalltalk[i]) == 0)
+			return 1;
+	}
 	return 0;
 
 }
@@ -326,9 +336,9 @@ int chatbot_is_smalltalk(const char *intent) {
  *   1, if the chatbot should stop chatting (e.g. the smalltalk was "goodbye" etc.)
  */
 int chatbot_do_smalltalk(int inc, char *inv[], char *response, int n) {
-
-	/* to be implemented */
-
+	size_t smalltalk_length = sizeof(smalltalk) / sizeof(smalltalk[0]);
+	int random_response = rand() % smalltalk_length;
+	snprintf(response, MAX_RESPONSE, smalltalk[random_response]);
 	return 0;
 
 }

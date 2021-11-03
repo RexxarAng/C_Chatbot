@@ -34,6 +34,7 @@ void prompt_user(char *buf, int n, const char *format, ...);
 
 /* functions defined in chatbot.c */
 const char *chatbot_botname();
+char* chatbot_set_username(char *name);
 const char *chatbot_username();
 int chatbot_main(int inc, char *inv[], char *response, int n);
 int chatbot_is_exit(const char *intent);
