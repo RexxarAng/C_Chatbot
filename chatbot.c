@@ -44,7 +44,6 @@
 #include <string.h>
 #include "chat1002.h"
 
-char* smalltalk[] = { "hello", "yo", "hi", "oi", "hiya", "heyyo", "greetings", "hey", "wassup", "moshi", "ohaiyo", "konichiwa"};
 char username[MAX_INPUT] = "Me";
 
 /*
@@ -59,6 +58,7 @@ const char *chatbot_botname() {
 }
 
 char* chatbot_set_username(char *name) {
+
 	strcpy(username, name);
 }
 
@@ -198,11 +198,10 @@ int chatbot_do_load(int inc, char *inv[], char *response, int n) {
  *  1, if the intent is "what", "where", or "who"
  *  0, otherwise
  */
-int chatbot_is_question(const char *intent) {
+int chatbot_is_question(const char* intent) {
 
 	/* to be implemented */
-
-	return 0;
+	return compare_token(intent, "what") == 0 || compare_token(intent, "where") == 0 || compare_token(intent, "who") == 0;
 
 }
 
@@ -210,7 +209,7 @@ int chatbot_is_question(const char *intent) {
 /*
  * Answer a question.
  *
- * inv[0] contains the the question word.
+ * inv[0] contains the the question word.	
  * inv[1] may contain "is" or "are"; if so, it is skipped.
  * The remainder of the words form the entity.
  *
@@ -223,6 +222,8 @@ int chatbot_is_question(const char *intent) {
 int chatbot_do_question(int inc, char *inv[], char *response, int n) {
 
 	/* to be implemented */
+	
+	snprintf(response, n, "Sorry I don't understand your question still. Not implemented");
 
 	return 0;
 
@@ -241,9 +242,7 @@ int chatbot_do_question(int inc, char *inv[], char *response, int n) {
  */
 int chatbot_is_reset(const char *intent) {
 
-	/* to be implemented */
-
-	return 0;
+	return compare_token(intent, "reset") == 0;
 
 }
 
@@ -278,9 +277,7 @@ int chatbot_do_reset(int inc, char *inv[], char *response, int n) {
  */
 int chatbot_is_save(const char *intent) {
 
-	/* to be implemented */
-
-	return 0;
+	return compare_token(intent, "save") == 0;
 
 }
 
@@ -297,6 +294,7 @@ int chatbot_is_save(const char *intent) {
 int chatbot_do_save(int inc, char *inv[], char *response, int n) {
 
 	/* to be implemented */
+	snprintf(response, n, "Sorry I still can't save yet, not implemented.");
 
 	return 0;
 
@@ -315,6 +313,7 @@ int chatbot_do_save(int inc, char *inv[], char *response, int n) {
  *  0, otherwise
  */
 int chatbot_is_smalltalk(const char *intent) {
+	char* smalltalk[] = { "hello", "yo", "hi", "oi", "hiya", "heyyo", "greetings", "hey", "wassup", "moshi", "ohaiyo", "konichiwa", "goodbye", "bye", "cya" };
 	size_t smalltalk_length = sizeof(smalltalk) / sizeof(smalltalk[0]);
 	for (int i = 0; i < smalltalk_length; i++) {
 		if (compare_token(intent, smalltalk[i]) == 0)
@@ -336,9 +335,19 @@ int chatbot_is_smalltalk(const char *intent) {
  *   1, if the chatbot should stop chatting (e.g. the smalltalk was "goodbye" etc.)
  */
 int chatbot_do_smalltalk(int inc, char *inv[], char *response, int n) {
-	size_t smalltalk_length = sizeof(smalltalk) / sizeof(smalltalk[0]);
-	int random_response = rand() % smalltalk_length;
-	snprintf(response, MAX_RESPONSE, smalltalk[random_response]);
+	char* smalltalk_greetings[] = { "hello", "yo", "hi", "oi", "hiya", "heyyo", "greetings", "hey", "wassup", "moshi", "ohaiyo", "konichiwa" };
+	char* smalltalk_farewells[] = { "goodbye", "bye", "cya" };
+	size_t smalltalk_farewells_length = sizeof(smalltalk_farewells) / sizeof(smalltalk_farewells[0]);
+	for (int i = 0; i < smalltalk_farewells_length; i++) {
+		if (compare_token(inv[0], smalltalk_farewells[i]) == 0) {
+			int random_response = rand() % smalltalk_farewells_length;
+			snprintf(response, MAX_RESPONSE, smalltalk_farewells[random_response]);
+			return 1;
+		}
+	}
+	size_t smalltalk_greetings_length = sizeof(smalltalk_greetings) / sizeof(smalltalk_greetings[0]);
+	int random_response = rand() % smalltalk_greetings_length;
+	snprintf(response, MAX_RESPONSE, smalltalk_greetings[random_response]);
 	return 0;
 
 }

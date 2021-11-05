@@ -58,8 +58,16 @@ int knowledge_get(const char *intent, const char *entity, char *response, int n)
 int knowledge_put(const char *intent, const char *entity, const char *response) {
 
 	/* to be implemented */
-
-	return KB_INVALID;
+	int result;
+	if (compare_token(intent, "what") == 0)
+		result = KB_FOUND;
+	else if (compare_token(intent, "where") == 0)
+		result = KB_FOUND;
+	else if (compare_token(intent, "who") == 0)
+		result = KB_FOUND;
+	else
+		result = KB_INVALID;
+	return result;
 
 }
 
