@@ -27,6 +27,16 @@
 #define KB_NOTFOUND -1
 #define KB_INVALID  -2
 #define KB_NOMEM    -3
+
+/* Define structure for the linked list nodes for the three different intents*/
+typedef struct node {
+	char* entity;
+	char* response;
+	struct node* next;
+} node;
+
+/* Define pointers to the head of each linked list of the three different intents*/
+node *what_head, *where_head, *who_head;
  
 /* functions defined in main.c */
 int compare_token(const char *token1, const char *token2);

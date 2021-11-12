@@ -92,6 +92,16 @@ int knowledge_read(FILE *f) {
 	char intent[MAX_INTENT], entity[MAX_ENTITY], file_responses[MAX_RESPONSE];
 	while (fgets(&buffer, MAX_INTENT, f)) {
 		printf(buffer);
+		if (strstr(buffer, "[what]")) {
+			strcpy(intent, "what");
+		}
+		else if (strstr(buffer, "[where]")) {
+			strcpy(intent, "where");
+		}
+		else if (strstr(buffer, "[who]")) {
+			strcpy(intent, "who");
+		}
+
 	}
 
 	return 0;
