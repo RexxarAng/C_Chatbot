@@ -163,9 +163,7 @@ int chatbot_do_exit(int inc, char *inv[], char *response, int n) {
  */
 int chatbot_is_load(const char *intent) {
 
-	/* to be implemented */
-
-	return 0;
+	return compare_token(intent, "load") == 0;
 
 }
 
@@ -180,8 +178,23 @@ int chatbot_is_load(const char *intent) {
  *   0 (the chatbot always continues chatting after loading knowledge)
  */
 int chatbot_do_load(int inc, char *inv[], char *response, int n) {
-
+	int no_of_responses = 0;
 	/* to be implemented */
+	if (inv[1] == NULL) {
+		strcpy(response, "No file is inputted");
+	}
+	else {
+		FILE* file_ptr;
+
+		if (file_ptr = fopen(inv[1], "r")) {
+			no_of_responses = knowledge_read(file_ptr);
+			fclose(file_ptr);
+			snprintf(response, n, "Read %d responses from %s", no_of_responses, inv[1]);
+		}
+		else {
+			snprintf(response, n , "\"%s\" file not found!", inv[1]);
+		}
+	}
 
 	return 0;
 

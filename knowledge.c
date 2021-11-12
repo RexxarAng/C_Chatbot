@@ -60,13 +60,17 @@ int knowledge_put(const char *intent, const char *entity, const char *response) 
 	/* to be implemented */
 	int result;
 	if (compare_token(intent, "what") == 0)
+		//implement check knowledge if entity exist and return KB_FOUND or KB_NOTFOUND
 		result = KB_FOUND;
 	else if (compare_token(intent, "where") == 0)
+		//implement check knowledge if entity exist and return KB_FOUND or KB_NOTFOUND
 		result = KB_FOUND;
 	else if (compare_token(intent, "who") == 0)
+		//implement check knowledge if entity exist and return KB_FOUND or KB_NOTFOUND
 		result = KB_FOUND;
 	else
 		result = KB_INVALID;
+
 	return result;
 
 }
@@ -83,6 +87,12 @@ int knowledge_put(const char *intent, const char *entity, const char *response) 
 int knowledge_read(FILE *f) {
 
 	/* to be implemented */
+	int no_of_responses = 0;
+	char buffer[MAX_INTENT];
+	char intent[MAX_INTENT], entity[MAX_ENTITY], file_responses[MAX_RESPONSE];
+	while (fgets(&buffer, MAX_INTENT, f)) {
+		printf(buffer);
+	}
 
 	return 0;
 }
