@@ -36,38 +36,51 @@ int knowledge_get(const char *intent, const char *entity, char *response, int n)
 	/* to be implemented */
 	if (compare_token(intent, "what") == 0) {
 		node* what_iterator = what_head;
-
+		// While there is still node in the linked list
 		while (what_iterator != NULL) {
+			printf(what_iterator->response);
+			// If entity matches
 			if (compare_token(what_iterator->entity, entity) == 0) {
+				// Copy the response of the entity matched into the response buffer
+				strncpy(response, what_iterator->response, n);
 				return KB_FOUND;
 			}
+			// Update iterator to next node to continue traversing the linked list
 			what_iterator = what_iterator->next;
 		}
-
+		// If the code reaches this statement, no entity has been matched for this intent
 		return KB_NOTFOUND;
 	}
 	else if (compare_token(intent, "where") == 0) {
 		node* where_iterator = where_head;
-		// Find if entity already exists, and replace the response
+		// While there is still node in the linked list
 		while (where_iterator != NULL) {
+			// If entity matches
 			if (compare_token(where_iterator->entity, entity) == 0) {
-				strncpy(where_iterator->response, response, MAX_RESPONSE);
+				// Copy the response of the entity matched into the response buffer
+				strncpy(response, where_iterator->response, n);
 				return KB_FOUND;
 			}
+			// Update iterator to next node to continue traversing the linked list
 			where_iterator = where_iterator->next;
 		}
+		// If the code reaches this statement, no entity has been matched for this intent
 		return KB_NOTFOUND;
 	}
 	else if (compare_token(intent, "who") == 0) {
 		node* who_iterator = who_head;
-		// Find if entity already exists, and replace the response
+		// While there is still node in the linked list
 		while (who_iterator != NULL) {
+			// If entity matches
 			if (compare_token(who_iterator->entity, entity) == 0) {
-				strncpy(who_iterator->response, response, MAX_RESPONSE);
+				// Copy the response of the entity matched into the response buffer
+				strncpy(response, who_iterator->response, n);
 				return KB_FOUND;
 			}
+			// Update iterator to next node to continue traversing the linked list
 			who_iterator = who_iterator->next;
 		}
+		// If the code reaches this statement, no entity has been matched for this intent
 		return KB_NOTFOUND;
 	}
 	else {
@@ -235,7 +248,7 @@ int knowledge_read(FILE* f) {
 			printf("%s\n", line);
 			split_text = strtok(line, "=");
 			strcpy(entity, split_text);
-			split_text = strtok(line, "=");
+			split_text = strtok(NULL, "=");
 			strcpy(response, split_text);
 			int result = knowledge_put(intent, entity, response);
 			if (result == KB_FOUND) {
