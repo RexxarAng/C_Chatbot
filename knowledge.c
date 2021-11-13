@@ -37,9 +37,7 @@ int knowledge_get(const char *intent, const char *entity, char *response, int n)
 	if (compare_token(intent, "what") == 0) {
 		node* what_iterator = what_head;
 		// While there is still node in the linked list
-		while (what_iterator != NULL) {
-			printf(what_iterator->response);
-			// If entity matches
+		while (what_iterator != NULL) {			// If entity matches
 			if (compare_token(what_iterator->entity, entity) == 0) {
 				// Copy the response of the entity matched into the response buffer
 				strncpy(response, what_iterator->response, n);
@@ -222,15 +220,9 @@ int knowledge_read(FILE* f) {
 	int no_of_responses = 0;
 	char line[MAX_ENTITY + MAX_RESPONSE];
 	char intent[MAX_INTENT], entity[MAX_ENTITY], response[MAX_RESPONSE];
-	char* split_text;
 
 	while (fgets(line, sizeof(line), f)) {
-		//printf(line);
-
-		if (strcmp(line, "\n") == 0 || strcmp(line, "\r\n") == 0) {
-			continue;
-		}
-
+		
 		if (strstr(line, "[what]")) {
 			strcpy(intent, "what");
 			continue;
@@ -246,10 +238,8 @@ int knowledge_read(FILE* f) {
 
 		if (strchr(line, '=')) {
 			printf("%s\n", line);
-			split_text = strtok(line, "=");
-			strcpy(entity, split_text);
-			split_text = strtok(NULL, "=");
-			strcpy(response, split_text);
+			strcpy(entity, strtok(line, "="));
+			strcpy(response, strtok(NULL, "="));
 			int result = knowledge_put(intent, entity, response);
 			if (result == KB_FOUND) {
 				no_of_responses++;

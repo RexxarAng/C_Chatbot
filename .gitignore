@@ -4,3 +4,4 @@ Debug
 *.filters
 *.vcxproj
 *.user
+enc_temp_folder
