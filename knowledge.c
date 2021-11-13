@@ -34,8 +34,45 @@
 int knowledge_get(const char *intent, const char *entity, char *response, int n) {
 
 	/* to be implemented */
+	if (compare_token(intent, "what") == 0) {
+		node* what_iterator = what_head;
 
-	return KB_NOTFOUND;
+		while (what_iterator != NULL) {
+			if (compare_token(what_iterator->entity, entity) == 0) {
+				return KB_FOUND;
+			}
+			what_iterator = what_iterator->next;
+		}
+
+		return KB_NOTFOUND;
+	}
+	else if (compare_token(intent, "where") == 0) {
+		node* where_iterator = where_head;
+		// Find if entity already exists, and replace the response
+		while (where_iterator != NULL) {
+			if (compare_token(where_iterator->entity, entity) == 0) {
+				strncpy(where_iterator->response, response, MAX_RESPONSE);
+				return KB_FOUND;
+			}
+			where_iterator = where_iterator->next;
+		}
+		return KB_NOTFOUND;
+	}
+	else if (compare_token(intent, "who") == 0) {
+		node* who_iterator = who_head;
+		// Find if entity already exists, and replace the response
+		while (who_iterator != NULL) {
+			if (compare_token(who_iterator->entity, entity) == 0) {
+				strncpy(who_iterator->response, response, MAX_RESPONSE);
+				return KB_FOUND;
+			}
+			who_iterator = who_iterator->next;
+		}
+		return KB_NOTFOUND;
+	}
+	else {
+		return KB_INVALID;
+	}
 
 }
 
@@ -58,20 +95,103 @@ int knowledge_get(const char *intent, const char *entity, char *response, int n)
 int knowledge_put(const char *intent, const char *entity, const char *response) {
 
 	/* to be implemented */
-	int result;
-	if (compare_token(intent, "what") == 0)
-		//implement check knowledge if entity exist and return KB_FOUND or KB_NOTFOUND
-		result = KB_FOUND;
-	else if (compare_token(intent, "where") == 0)
-		//implement check knowledge if entity exist and return KB_FOUND or KB_NOTFOUND
-		result = KB_FOUND;
-	else if (compare_token(intent, "who") == 0)
-		//implement check knowledge if entity exist and return KB_FOUND or KB_NOTFOUND
-		result = KB_FOUND;
-	else
-		result = KB_INVALID;
+	if (compare_token(intent, "what") == 0) {
+		node* what_iterator = what_head;
+		// Find if entity already exists, and replace the response
+		while(what_iterator != NULL) {
+			if (compare_token(what_iterator->entity, entity) == 0) {
+				strncpy(what_iterator->response, response, MAX_RESPONSE);
+				return KB_FOUND;
+			}
+			what_iterator = what_iterator->next;
+		} 
+		
+		// Create new node and insert at the end of linked list
+		node* new_node = malloc(sizeof(node));
+		if (new_node == NULL) {
+			return KB_NOMEM;
+		}
+		strncpy(new_node->entity, entity, MAX_ENTITY);
+		strncpy(new_node->response, response, MAX_RESPONSE);
+		new_node->next = NULL;
+		// if linked list is empty, set it to the new node
+		if (what_head == NULL)
+			what_head = new_node;
+		// else search for the last node and set the next to the new node created, add node to the end of the linked list
+		else {
+			node* last_node = what_head;
+			while (last_node->next != NULL) {
+				last_node = last_node->next;
+			}
+			last_node->next = new_node;
+		}
+		return KB_FOUND;
+	}
+	else if (compare_token(intent, "where") == 0) {
+		node* where_iterator = where_head;
+		// Find if entity already exists, and replace the response
+		while (where_iterator != NULL) {
+			if (compare_token(where_iterator->entity, entity) == 0) {
+				strncpy(where_iterator->response, response, MAX_RESPONSE);
+				return KB_FOUND;
+			}
+			where_iterator = where_iterator->next;
+		}
 
-	return result;
+		node* new_node = malloc(sizeof(node));
+		if (new_node == NULL) {
+			return KB_NOMEM;
+		}
+		strncpy(new_node->entity, entity, MAX_ENTITY);
+		strncpy(new_node->response, response, MAX_RESPONSE);
+		new_node->next = NULL;
+		// if linked list is empty, set it to the new node
+		if (where_head == NULL)
+			where_head = new_node;
+		// else search for the last node and set the next to the new node created, add node to the end of the linked list
+		else {
+			node* last_node = where_head;
+			while (last_node->next != NULL) {
+				last_node = last_node->next;
+			}
+			last_node->next = new_node;
+		}
+		return KB_FOUND;
+	}
+		
+	else if (compare_token(intent, "who") == 0) {
+		node* who_iterator = who_head;
+		// Find if entity already exists, and replace the response
+		while (who_iterator != NULL) {
+			if (compare_token(who_iterator->entity, entity) == 0) {
+				strncpy(who_iterator->response, response, MAX_RESPONSE);
+				return KB_FOUND;
+			}
+			who_iterator = who_iterator->next;
+		}
+
+		node* new_node = malloc(sizeof(node));
+		if (new_node == NULL) {
+			return KB_NOMEM;
+		}
+		strncpy(new_node->entity, entity, MAX_ENTITY);
+		strncpy(new_node->response, response, MAX_RESPONSE);
+		new_node->next = NULL;
+		// if linked list is empty, set it to the new node
+		if (who_head == NULL)
+			who_head = new_node;
+		// else search for the last node and set the next to the new node created, add node to the end of the linked list
+		else {
+			node* last_node = who_head;
+			while (last_node->next != NULL) {
+				last_node = last_node->next;
+			}
+			last_node->next = new_node;
+		}
+		return KB_FOUND;
+	}
+	else
+		return KB_INVALID;
 
 }
 
@@ -84,27 +204,48 @@ int knowledge_put(const char *intent, const char *entity, const char *response) 
  *
  * Returns: the number of entity/response pairs successful read from the file
  */
-int knowledge_read(FILE *f) {
+int knowledge_read(FILE* f) {
 
-	/* to be implemented */
 	int no_of_responses = 0;
-	char buffer[MAX_INTENT];
-	char intent[MAX_INTENT], entity[MAX_ENTITY], file_responses[MAX_RESPONSE];
-	while (fgets(&buffer, MAX_INTENT, f)) {
-		printf(buffer);
-		if (strstr(buffer, "[what]")) {
+	char line[MAX_ENTITY + MAX_RESPONSE];
+	char intent[MAX_INTENT], entity[MAX_ENTITY], response[MAX_RESPONSE];
+	char* split_text;
+
+	while (fgets(line, sizeof(line), f)) {
+		//printf(line);
+
+		if (strcmp(line, "\n") == 0 || strcmp(line, "\r\n") == 0) {
+			continue;
+		}
+
+		if (strstr(line, "[what]")) {
 			strcpy(intent, "what");
+			continue;
 		}
-		else if (strstr(buffer, "[where]")) {
+		else if (strstr(line, "[where]")) {
 			strcpy(intent, "where");
+			continue;
 		}
-		else if (strstr(buffer, "[who]")) {
+		else if (strstr(line, "[who]")) {
 			strcpy(intent, "who");
+			continue;
+		}
+
+		if (strchr(line, '=')) {
+			printf("%s\n", line);
+			split_text = strtok(line, "=");
+			strcpy(entity, split_text);
+			split_text = strtok(line, "=");
+			strcpy(response, split_text);
+			int result = knowledge_put(intent, entity, response);
+			if (result == KB_FOUND) {
+				no_of_responses++;
+			}
+
 		}
 
 	}
-
-	return 0;
+	return no_of_responses;
 }
 
 

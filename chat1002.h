@@ -30,8 +30,8 @@
 
 /* Define structure for the linked list nodes for the three different intents*/
 typedef struct node {
-	char* entity;
-	char* response;
+	char* entity[MAX_ENTITY];
+	char* response[MAX_RESPONSE];
 	struct node* next;
 } node;
 
