@@ -256,8 +256,33 @@ int knowledge_read(FILE* f) {
  * Reset the knowledge base, removing all know entitities from all intents.
  */
 void knowledge_reset() {
+	node* current;
 
-	/* to be implemented */
+	node* what_iterator = what_head;
+	while (what_iterator != NULL) {
+		current = what_iterator;
+		what_iterator = what_iterator->next;
+		free(current);
+	}
+	what_head = NULL;
+
+
+	node* where_iterator = where_head;
+	while (where_iterator != NULL) {
+		current = where_iterator;
+		where_iterator = where_iterator->next;
+		free(current);
+	}
+	where_head = NULL;
+
+	node* who_iterator = who_head;
+	while (who_iterator != NULL) {
+		current = who_iterator;
+		who_iterator = who_iterator->next;
+		free(current);
+	}
+	who_head = NULL;
+
 
 }
 

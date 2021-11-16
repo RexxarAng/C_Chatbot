@@ -57,12 +57,13 @@ const char *chatbot_botname() {
 
 }
 
-char* chatbot_set_username(char *name) {
+/*
+ * Set username of the user.
+ */
 
+char* chatbot_set_username(char *name) {
 	strcpy(username, name);
 }
-
-
 
 
 /*
@@ -270,7 +271,8 @@ int chatbot_is_reset(const char *intent) {
  */
 int chatbot_do_reset(int inc, char *inv[], char *response, int n) {
 
-	/* to be implemented */
+	knowledge_reset();
+	snprintf(response, n, "Chatbot is now reset");
 
 	return 0;
 

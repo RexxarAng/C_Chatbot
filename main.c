@@ -92,6 +92,8 @@ int main(int argc, char *argv[]) {
 
 	} while (!done);
 
+	knowledge_reset();
+
 	return 0;
 }
 

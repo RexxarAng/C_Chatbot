@@ -37,6 +37,16 @@ typedef struct node {
 
 /* Define pointers to the head of each linked list of the three different intents*/
 node *what_head, *where_head, *who_head;
+
+///* Define structure for linked list for each of the intents */
+//typedef struct intent {
+//	struct node* intent_ptr;
+//	struct intent* next;
+//} intent;
+//
+///* Define pointers to the main intent linked list to store all intents */
+//intent* intents;
+
  
 /* functions defined in main.c */
 int compare_token(const char *token1, const char *token2);
