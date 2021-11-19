@@ -224,22 +224,22 @@ int knowledge_read(FILE* f) {
 	while (fgets(line, sizeof(line), f)) {
 		
 		if (strstr(line, "[what]")) {
-			strcpy(intent, "what");
+			strncpy(intent, "what", MAX_INTENT);
 			continue;
 		}
 		else if (strstr(line, "[where]")) {
-			strcpy(intent, "where");
+			strncpy(intent, "where", MAX_INTENT);
 			continue;
 		}
 		else if (strstr(line, "[who]")) {
-			strcpy(intent, "who");
+			strncpy(intent, "who", MAX_INTENT);
 			continue;
 		}
 
 		if (strchr(line, '=')) {
 			printf("%s\n", line);
-			strcpy(entity, strtok(line, "="));
-			strcpy(response, strtok(NULL, "="));
+			strncpy(entity, strtok(line, "="), MAX_ENTITY);
+			strncpy(response, strtok(NULL, "="), MAX_RESPONSE);
 			int result = knowledge_put(intent, entity, response);
 			if (result == KB_FOUND) {
 				no_of_responses++;

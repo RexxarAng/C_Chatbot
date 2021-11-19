@@ -237,7 +237,9 @@ int chatbot_is_question(const char* intent) {
 int chatbot_do_question(int inc, char *inv[], char *response, int n) {
 
 	/* to be implemented */
-	snprintf(response, n, "Sorry I don't understand your question still. Not implemented");
+	//knowledge_get(inv[0], inv[1], response, n);
+
+	snprintf(response, n, "sorry i don't understand your question still. not implemented");
 
 	return 0;
 
