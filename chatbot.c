@@ -42,6 +42,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 #include "chat1002.h"
 
 char username[MAX_INPUT] = "Me";
@@ -327,7 +328,7 @@ int chatbot_do_save(int inc, char *inv[], char *response, int n) {
  *  0, otherwise
  */
 int chatbot_is_smalltalk(const char *intent) {
-	char* smalltalk[] = { "hello", "yo", "hi", "oi", "hiya", "heyyo", "greetings", "hey", "wassup", "moshi", "ohaiyo", "konichiwa", "goodbye", "bye", "cya" };
+	char* smalltalk[] = { "hello", "yo", "hi", "oi", "hiya", "heyyo", "greetings", "hey", "wassup", "moshi", "ohaiyo", "konichiwa", "goodbye", "bye", "cya", "tell", "time", "date", "joke", "fact"};
 	size_t smalltalk_length = sizeof(smalltalk) / sizeof(smalltalk[0]);
 	for (int i = 0; i < smalltalk_length; i++) {
 		if (compare_token(intent, smalltalk[i]) == 0)
@@ -349,7 +350,55 @@ int chatbot_is_smalltalk(const char *intent) {
  *   1, if the chatbot should stop chatting (e.g. the smalltalk was "goodbye" etc.)
  */
 int chatbot_do_smalltalk(int inc, char *inv[], char *response, int n) {
-	char* smalltalk_greetings[] = { "hello", "yo", "hi", "oi", "hiya", "heyyo", "greetings", "hey", "wassup", "moshi", "ohaiyo", "konichiwa" };
+	if (compare_token(inv[0], "time") == 0 || compare_token(inv[0], "date") == 0) {
+		time_t rawtime;
+		struct tm* timeinfo;
+		time(&rawtime);
+		timeinfo = localtime(&rawtime);
+		if (rawtime == -1) {
+			snprintf(response, MAX_RESPONSE, "Something is has happened, could not get the time");
+			return 0;
+		}
+		char* formatted_response[MAX_RESPONSE];
+		sprintf(formatted_response, "It is now %02d:%02d:%02d on %02d/%2d/%4d", timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec, timeinfo->tm_mday, timeinfo->tm_mon + 1, timeinfo->tm_year + 1900);
+		snprintf(response, MAX_RESPONSE, formatted_response);
+		return 0;
+	}
+	if ((compare_token(inv[0], "tell") == 0 && compare_token(inv[1], "me") == 0) ||
+		compare_token(inv[0], "joke") == 0 ||
+		compare_token(inv[0], "fact") == 0) {
+		int choice = 0;
+		for (int i = 0; i < inc; i++) {
+			if (compare_token(inv[i], "fact") == 0) {
+				choice = 1;
+				break;
+			}
+			else if (compare_token(inv[i], "joke") == 0) {
+				choice = 2;
+				break;
+			} 
+		}
+		if (choice == 1) {
+			char* smalltalk_fun_facts[] = { "The first person convicted of speeding was going eight mph.", "The world wastes about 1 billion metric tons of food each year. It is actually sad.", "The severed head of a sea slug can grow a whole new body", "Goosebumps are meant to ward off predators.", "The wood frog can hold its pee for up to eight months." };
+			size_t smalltalk_fun_facts_length = sizeof(smalltalk_fun_facts) / sizeof(smalltalk_fun_facts[0]);
+			int random_response = rand() % smalltalk_fun_facts_length;
+			snprintf(response, MAX_RESPONSE, smalltalk_fun_facts[random_response]);
+		}
+		else if (choice == 2) {
+			char* smalltalk_jokes[] = { "What do you call a bagel that can fly?", "What do you call a joke without a punchline?", "What do you call someone that saw an Iphone being stolen?"};
+			char* smalltalk_answers[] = { "A plain bagel", "Silence", "An IWitness" };
+			size_t smalltalk_jokes_length = sizeof(smalltalk_jokes) / sizeof(smalltalk_jokes[0]);
+			int random_response = rand() % smalltalk_jokes_length;
+			printf("%s: %s\n", chatbot_botname(), smalltalk_jokes[random_response]);
+			delay(1);
+			snprintf(response, MAX_RESPONSE, smalltalk_answers[random_response]);
+		}
+		else {
+			snprintf(response, MAX_RESPONSE, "Sorry I am unable to understand, try saying \"tell me a joke\" or \"tell me a fun fact\"");
+		}
+		return 0;
+	}
+
 	char* smalltalk_farewells[] = { "goodbye", "bye", "cya" };
 	size_t smalltalk_farewells_length = sizeof(smalltalk_farewells) / sizeof(smalltalk_farewells[0]);
 	for (int i = 0; i < smalltalk_farewells_length; i++) {
@@ -359,6 +408,8 @@ int chatbot_do_smalltalk(int inc, char *inv[], char *response, int n) {
 			return 1;
 		}
 	}
+
+	char* smalltalk_greetings[] = { "hello", "yo", "hi", "oi", "hiya", "heyyo", "greetings", "hey", "wassup", "moshi", "ohaiyo", "konichiwa" };
 	size_t smalltalk_greetings_length = sizeof(smalltalk_greetings) / sizeof(smalltalk_greetings[0]);
 	int random_response = rand() % smalltalk_greetings_length;
 	snprintf(response, MAX_RESPONSE, smalltalk_greetings[random_response]);
