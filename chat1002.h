@@ -32,6 +32,7 @@
 typedef struct node {
 	char* entity[MAX_ENTITY];
 	char* response[MAX_RESPONSE];
+	char* entity[MAX_ENTITY];
 	struct node* next;
 } node;
 
