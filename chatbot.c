@@ -311,10 +311,34 @@ int chatbot_is_save(const char *intent) {
 int chatbot_do_save(int inc, char *inv[], char *response, int n) {
 
 	/* to be implemented */
-	snprintf(response, n, "Sorry I still can't save yet, not implemented.");
+char file_name[64];
+    if (inv[1] == NULL)
+    {
+        strcpy(response,"No file inputted!");                
+    }
+    else if (what_head == NULL && where_head == NULL && who_head == NULL) 
+    {
+    	strcpy(response, "Database is empty!");
+    }
+    else
+    {
+    	strcpy(file_name, inv[1]);
 
+    	int num;
+   	FILE *file_ptr;
+   	file_ptr = fopen(file_name, "w");
+    	if(fptr == NULL)
+	{  
+		strcpy(response,"Error creating file");             
+	}
+	else 
+	{
+		nowledge_write(file_ptr);
+    		snprintf(response, n, "My knowledge has been saved to %s.", file_name);
+	}
+	fclose(file_ptr);
+    }	
 	return 0;
-
 }
 
 
