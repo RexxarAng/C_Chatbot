@@ -322,20 +322,18 @@ int chatbot_do_save(int inc, char *inv[], char *response, int n) {
     else
     {
     	strcpy(file_name, inv[1]);
-
-    	int num;
-   	FILE *file_ptr;
-   	file_ptr = fopen(file_name, "w");
+   		FILE *file_ptr;
+   		file_ptr = fopen(file_name, "w");
     	if(file_ptr == NULL)
-	{  
-		strcpy(response,"Error creating file");             
-	}
-	else 
-	{
-		knowledge_write(file_ptr);
-    	snprintf(response, n, "My knowledge has been saved to %s.", file_name);
-	}
-	fclose(file_ptr);
+		{  
+			strcpy(response,"Error creating file");             
+		} 
+		else 
+		{
+			knowledge_write(file_ptr);
+    		snprintf(response, n, "My knowledge has been saved to %s.", file_name);
+			fclose(file_ptr);
+		}
     }	
 	return 0;
 }

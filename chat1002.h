@@ -39,7 +39,6 @@ typedef struct node {
 node *what_head, *where_head, *who_head;
 
 ///* Define structure for linked list for each of the intents */
-// Do check this part
 node *who_iterator , *what_iterator, *where_iterator;
 
 //typedef struct intent {

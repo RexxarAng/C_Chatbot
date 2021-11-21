@@ -40,7 +40,7 @@ int knowledge_get(const char *intent, const char *entity, char *response, int n)
 		while (what_iterator != NULL) {			// If entity matches
 			if (compare_token(what_iterator->entity, entity) == 0) {
 				// Copy the response of the entity matched into the response buffer
-				strncpy(response, what_iterator->response, n);
+				strncpy(response, what_iterator->response, MAX_RESPONSE);
 				return KB_FOUND;
 			}
 			// Update iterator to next node to continue traversing the linked list
@@ -56,7 +56,7 @@ int knowledge_get(const char *intent, const char *entity, char *response, int n)
 			// If entity matches
 			if (compare_token(where_iterator->entity, entity) == 0) {
 				// Copy the response of the entity matched into the response buffer
-				strncpy(response, where_iterator->response, n);
+				strncpy(response, where_iterator->response, MAX_RESPONSE);
 				return KB_FOUND;
 			}
 			// Update iterator to next node to continue traversing the linked list
@@ -72,7 +72,7 @@ int knowledge_get(const char *intent, const char *entity, char *response, int n)
 			// If entity matches
 			if (compare_token(who_iterator->entity, entity) == 0) {
 				// Copy the response of the entity matched into the response buffer
-				strncpy(response, who_iterator->response, n);
+				strncpy(response, who_iterator->response, MAX_RESPONSE);
 				return KB_FOUND;
 			}
 			// Update iterator to next node to continue traversing the linked list
@@ -107,7 +107,7 @@ int knowledge_put(const char *intent, const char *entity, const char *response) 
 
 	/* to be implemented */
 	if (compare_token(intent, "what") == 0) {
-		node* what_iterator = what_head;
+		what_iterator = what_head;
 		// Find if entity already exists, and replace the response
 		while(what_iterator != NULL) {
 			if (compare_token(what_iterator->entity, entity) == 0) {
@@ -139,7 +139,7 @@ int knowledge_put(const char *intent, const char *entity, const char *response) 
 		return KB_FOUND;
 	}
 	else if (compare_token(intent, "where") == 0) {
-		node* where_iterator = where_head;
+		where_iterator = where_head;
 		// Find if entity already exists, and replace the response
 		while (where_iterator != NULL) {
 			if (compare_token(where_iterator->entity, entity) == 0) {
@@ -171,7 +171,7 @@ int knowledge_put(const char *intent, const char *entity, const char *response) 
 	}
 		
 	else if (compare_token(intent, "who") == 0) {
-		node* who_iterator = who_head;
+		who_iterator = who_head;
 		// Find if entity already exists, and replace the response
 		while (who_iterator != NULL) {
 			if (compare_token(who_iterator->entity, entity) == 0) {
@@ -258,7 +258,7 @@ int knowledge_read(FILE* f) {
 void knowledge_reset() {
 	node* current;
 
-	node* what_iterator = what_head;
+	what_iterator = what_head;
 	while (what_iterator != NULL) {
 		current = what_iterator;
 		what_iterator = what_iterator->next;
@@ -267,7 +267,7 @@ void knowledge_reset() {
 	what_head = NULL;
 
 
-	node* where_iterator = where_head;
+	where_iterator = where_head;
 	while (where_iterator != NULL) {
 		current = where_iterator;
 		where_iterator = where_iterator->next;
@@ -275,7 +275,7 @@ void knowledge_reset() {
 	}
 	where_head = NULL;
 
-	node* who_iterator = who_head;
+	who_iterator = who_head;
 	while (who_iterator != NULL) {
 		current = who_iterator;
 		who_iterator = who_iterator->next;
@@ -298,40 +298,40 @@ void knowledge_write(FILE *f) {
 	/* to be implemented */
 	if (what_head != NULL)
 	{
-		node* write_what_head = what_head;	
+		what_iterator = what_head;	
 		fprintf(f,"[%s]\n", "what");
-		while (write_what_head != NULL)
+		while (what_iterator != NULL)
 		{
-			fprintf(f,"%s=", write_what_head -> entity);
-			fprintf(f,"%s\n", write_what_head -> response);
-                	write_what_head = write_what_head -> next;
+			fprintf(f,"%s=", what_iterator-> entity);
+			fprintf(f,"%s\n", what_iterator-> response);
+			what_iterator = what_iterator-> next;
 		}
 	}
 	 fprintf(f,"%s", "\n");
 	
 	if (where_head != NULL)
 	{
-		node* write_where_head = where_head;	
+		where_iterator = where_head;	
 		fprintf(f,"[%s]\n", "where");
-		while (write_where_head != NULL)
+		while (where_iterator != NULL)
 		{
-			fprintf(f,"%s=", write_where_head -> entity);
-			fprintf(f,"%s\n", write_where_head -> response);
-                	write_where_head = write_where_head -> next;
+			fprintf(f,"%s=", where_iterator-> entity);
+			fprintf(f,"%s\n", where_iterator-> response);
+			where_iterator = where_iterator-> next;
 		}
 	}
-	 fprintf(f,"%s", "\n");
+	fprintf(f,"%s", "\n");
 	
 	if (who_head != NULL)
 	{
-		node* write_who_head = who_head;	
+		who_iterator = who_head;	
 		fprintf(f,"[%s]\n", "who");
-		while (write_who_head != NULL)
+		while (who_iterator != NULL)
 		{
-			fprintf(f,"%s=", write_who_head -> entity);
-			fprintf(f,"%s\n", write_who_head -> response);
-                	write_who_head = write_who_head -> next;
+			fprintf(f,"%s=", who_iterator-> entity);
+			fprintf(f,"%s\n", who_iterator-> response);
+			who_iterator = who_iterator-> next;
 		}
 	}
-	 fprintf(f,"%s", "\n");
+	fprintf(f,"%s", "\n");
 }
