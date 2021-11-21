@@ -319,6 +319,9 @@ int chatbot_do_save(int inc, char *inv[], char *response, int n) {
     {
     	strcpy(response, "Database is empty!");
     }
+	else if (strlen(inv[1]) >= 64) {
+		strcpy(response, "Filename is too long, maximum of 63 characters!");
+	}
     else
     {
     	strcpy(file_name, inv[1]);
