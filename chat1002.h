@@ -39,6 +39,9 @@ typedef struct node {
 node *what_head, *where_head, *who_head;
 
 ///* Define structure for linked list for each of the intents */
+// Do check this part
+response_node *who_link_list, *what_link_list, *where_link_list;
+
 //typedef struct intent {
 //	struct node* intent_ptr;
 //	struct intent* next;
