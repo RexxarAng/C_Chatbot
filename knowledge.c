@@ -35,7 +35,7 @@ int knowledge_get(const char *intent, const char *entity, char *response, int n)
 
 	/* to be implemented */
 	if (compare_token(intent, "what") == 0) {
-		node* what_iterator = what_head;
+		what_iterator = what_head;
 		// While there is still node in the linked list
 		while (what_iterator != NULL) {			// If entity matches
 			if (compare_token(what_iterator->entity, entity) == 0) {
@@ -50,7 +50,7 @@ int knowledge_get(const char *intent, const char *entity, char *response, int n)
 		return KB_NOTFOUND;
 	}
 	else if (compare_token(intent, "where") == 0) {
-		node* where_iterator = where_head;
+		where_iterator = where_head;
 		// While there is still node in the linked list
 		while (where_iterator != NULL) {
 			// If entity matches
@@ -66,7 +66,7 @@ int knowledge_get(const char *intent, const char *entity, char *response, int n)
 		return KB_NOTFOUND;
 	}
 	else if (compare_token(intent, "who") == 0) {
-		node* who_iterator = who_head;
+		who_iterator = who_head;
 		// While there is still node in the linked list
 		while (who_iterator != NULL) {
 			// If entity matches
