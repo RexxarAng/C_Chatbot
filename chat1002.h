@@ -32,7 +32,6 @@
 typedef struct node {
 	char* entity[MAX_ENTITY];
 	char* response[MAX_RESPONSE];
-	char* entity[MAX_ENTITY];
 	struct node* next;
 } node;
 
@@ -41,7 +40,7 @@ node *what_head, *where_head, *who_head;
 
 ///* Define structure for linked list for each of the intents */
 // Do check this part
-response_node *who_iterator , *what_iterator, *where_iterator;
+node *who_iterator , *what_iterator, *where_iterator;
 
 //typedef struct intent {
 //	struct node* intent_ptr;

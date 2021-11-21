@@ -310,8 +310,7 @@ int chatbot_is_save(const char *intent) {
  */
 int chatbot_do_save(int inc, char *inv[], char *response, int n) {
 
-	/* to be implemented */
-char file_name[64];
+	char file_name[64];
     if (inv[1] == NULL)
     {
         strcpy(response,"No file inputted!");                
@@ -327,14 +326,14 @@ char file_name[64];
     	int num;
    	FILE *file_ptr;
    	file_ptr = fopen(file_name, "w");
-    	if(fptr == NULL)
+    	if(file_ptr == NULL)
 	{  
 		strcpy(response,"Error creating file");             
 	}
 	else 
 	{
-		nowledge_write(file_ptr);
-    		snprintf(response, n, "My knowledge has been saved to %s.", file_name);
+		knowledge_write(file_ptr);
+    	snprintf(response, n, "My knowledge has been saved to %s.", file_name);
 	}
 	fclose(file_ptr);
     }	
