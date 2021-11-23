@@ -47,6 +47,22 @@
 
 char username[MAX_INPUT] = "Me";
 
+void combine(char* out, char* src[], const size_t src_size, const size_t out_size, int offset) {
+	for (int i = offset; i < src_size; i++) {
+		// Check length
+		if (strlen(out) < out_size + 2) {
+			strcat(out, src[i]);
+			// Check if last element
+			if (i != src_size - 1) {
+				strcat(out, " ");
+			}
+		}
+		else {
+			strncat(out, src[i], out_size - strlen(out) - 1);
+		}
+	}
+}
+
 /*
  * Get the name of the chatbot.
  *
@@ -234,13 +250,60 @@ int chatbot_is_question(const char* intent) {
  * Returns:
  *   0 (the chatbot always continues chatting after a question)
  */
-int chatbot_do_question(int inc, char *inv[], char *response, int n) {
+int chatbot_do_question(int inc, char* inv[], char* response, int n) {
 
 	/* to be implemented */
 	//knowledge_get(inv[0], inv[1], response, n);
+	int output = 0;
+	int position = 0;
+	char* entity;
+	entity = calloc(1, MAX_ENTITY);
+	if (entity == NULL) {
+		snprintf(response, n, "Insfficient memory space");
+		return 1;
+	}
 
-	snprintf(response, n, "sorry i don't understand your question still. not implemented");
+	if (inc > 1) {
+		if (!compare_token(inv[1], "is") || !compare_token(inv[1], "are")) {
+			position = 2;
+		}
+		else {
+			position = 1;
+		}
+		combine(entity, inv, inc, MAX_ENTITY, position);
+		output = knowledge_get(inv[0], entity, response, n);
+	}
+	else {
+		snprintf(response, n, "Please ask a question with an entity.");
+	}
 
+	if (output == KB_NOTFOUND) {
+		// Rebuild question to be displayed
+		char* question;
+		question = calloc(1, MAX_INPUT);
+		if (question == NULL) {
+			snprintf(response, n, "Insfficient memory space");
+			return 1;
+		}
+		combine(question, inv, inc, MAX_INPUT, 0);
+
+		// Capitalise first word in question
+		question[0] = toupper(question[0]);
+		char ans[MAX_RESPONSE];
+		prompt_user(ans, MAX_RESPONSE, "I don't know. %s?", question);
+		output = knowledge_put(inv[0], entity, ans);
+		if (output == KB_FOUND) {
+			snprintf(response, n, "Thank you.");
+		}
+		else if (output == KB_NOMEM) {
+			snprintf(response, n, "Insfficient memory space");
+		}
+		else if (output == KB_INVALID) {
+			snprintf(response, n, "Invalid intent specified");
+		}
+		free(question);
+	}
+	free(entity);
 	return 0;
 
 }
