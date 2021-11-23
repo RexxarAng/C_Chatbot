@@ -436,7 +436,7 @@ int chatbot_do_smalltalk(int inc, char *inv[], char *response, int n) {
 		time(&rawtime);
 		timeinfo = localtime(&rawtime);
 		if (rawtime == -1) {
-			snprintf(response, MAX_RESPONSE, "Something is has happened, could not get the time");
+			snprintf(response, MAX_RESPONSE, "Something has happened, could not get the time");
 			return 0;
 		}
 		char* formatted_response[MAX_RESPONSE];
