@@ -47,22 +47,6 @@
 
 char username[MAX_INPUT] = "Me";
 
-void combine(char* out, char* src[], const size_t src_size, const size_t out_size, int offset) {
-	for (int i = offset; i < src_size; i++) {
-		// Check length
-		if (strlen(out) < out_size + 2) {
-			strcat(out, src[i]);
-			// Check if last element
-			if (i != src_size - 1) {
-				strcat(out, " ");
-			}
-		}
-		else {
-			strncat(out, src[i], out_size - strlen(out) - 1);
-		}
-	}
-}
-
 /*
  * Get the name of the chatbot.
  *
@@ -270,7 +254,7 @@ int chatbot_do_question(int inc, char* inv[], char* response, int n) {
 		else {
 			position = 1;
 		}
-		combine(entity, inv, inc, MAX_ENTITY, position);
+		substring(entity, inv, inc, MAX_ENTITY, position);
 		output = knowledge_get(inv[0], entity, response, n);
 	}
 	else {
@@ -280,12 +264,12 @@ int chatbot_do_question(int inc, char* inv[], char* response, int n) {
 	if (output == KB_NOTFOUND) {
 		// Rebuild question to be displayed
 		char* question;
-		question = calloc(1, MAX_INPUT);
+		question = calloc(1, MAX_RESPONSE);
 		if (question == NULL) {
 			snprintf(response, n, "Insufficient memory");
 			return 1;
 		}
-		combine(question, inv, inc, MAX_INPUT, 0);
+		substring(question, inv, inc, MAX_RESPONSE, 0);
 
 		// Capitalise first word in question
 		question[0] = toupper(question[0]);
@@ -376,31 +360,38 @@ int chatbot_do_save(int inc, char *inv[], char *response, int n) {
 	char file_name[64];
     if (inv[1] == NULL)
     {
-        strcpy(response,"No file inputted!");                
+        strcpy(response,"No file inputted!");
+		return 0;
     }
     else if (what_head == NULL && where_head == NULL && who_head == NULL) 
     {
     	strcpy(response, "Database is empty!");
+		return 0;
     }
 	else if (strlen(inv[1]) >= 64) {
 		strcpy(response, "Filename is too long, maximum of 63 characters!");
+		return 0;
+	}
+	else if (compare_token(inv[1], "to") == 0 || compare_token(inv[1], "as") == 0) {
+		strcpy(file_name, inv[2]);
 	}
     else
     {
     	strcpy(file_name, inv[1]);
-   		FILE *file_ptr;
-   		file_ptr = fopen(file_name, "w");
-    	if(file_ptr == NULL)
-		{  
-			strcpy(response,"Error creating file");             
-		} 
-		else 
-		{
-			knowledge_write(file_ptr);
-    		snprintf(response, n, "My knowledge has been saved to %s.", file_name);
-			fclose(file_ptr);
-		}
     }	
+
+	FILE* file_ptr;
+	file_ptr = fopen(file_name, "w");
+	if (file_ptr == NULL)
+	{
+		strcpy(response, "Error creating file");
+	}
+	else
+	{
+		knowledge_write(file_ptr);
+		snprintf(response, n, "My knowledge has been saved to %s.", file_name);
+		fclose(file_ptr);
+	}
 	return 0;
 }
 

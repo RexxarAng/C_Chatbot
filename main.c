@@ -157,3 +157,27 @@ void prompt_user(char *buf, int n, const char *format, ...) {
 	if (nl != NULL)
 		*nl = '\0';
 }
+
+/*
+ * Utility function for getting the substring by using the offset to loop through the original string.
+ * out = a buffer to store the output of the substring
+ * src = original string
+ * src_size = number of characters in the string
+ * out_size = maximum number of characters to be stored in the output buffer
+ * offset = offset from the original string to form the substring
+*/
+void substring(char* out, char* src[], const size_t src_size, const size_t out_size, int offset) {
+	for (int i = offset; i < src_size; i++) {
+		// Check length
+		if (strlen(out) < out_size + 2) {
+			strcat(out, src[i]);
+			// Check if last element
+			if (i != src_size - 1) {
+				strcat(out, " ");
+			}
+		}
+		else {
+			strncat(out, src[i], out_size - strlen(out) - 1);
+		}
+	}
+}
