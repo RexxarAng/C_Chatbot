@@ -259,7 +259,7 @@ int chatbot_do_question(int inc, char* inv[], char* response, int n) {
 	char* entity;
 	entity = calloc(1, MAX_ENTITY);
 	if (entity == NULL) {
-		snprintf(response, n, "Insfficient memory space");
+		snprintf(response, n, "Insufficient memory");
 		return 1;
 	}
 
@@ -274,7 +274,7 @@ int chatbot_do_question(int inc, char* inv[], char* response, int n) {
 		output = knowledge_get(inv[0], entity, response, n);
 	}
 	else {
-		snprintf(response, n, "Please ask a question with an entity.");
+		snprintf(response, n, "Sorry, entity is not found in the question.");
 	}
 
 	if (output == KB_NOTFOUND) {
@@ -282,7 +282,7 @@ int chatbot_do_question(int inc, char* inv[], char* response, int n) {
 		char* question;
 		question = calloc(1, MAX_INPUT);
 		if (question == NULL) {
-			snprintf(response, n, "Insfficient memory space");
+			snprintf(response, n, "Insufficient memory");
 			return 1;
 		}
 		combine(question, inv, inc, MAX_INPUT, 0);
@@ -296,7 +296,7 @@ int chatbot_do_question(int inc, char* inv[], char* response, int n) {
 			snprintf(response, n, "Thank you.");
 		}
 		else if (output == KB_NOMEM) {
-			snprintf(response, n, "Insfficient memory space");
+			snprintf(response, n, "Insufficient memory");
 		}
 		else if (output == KB_INVALID) {
 			snprintf(response, n, "Invalid intent specified");
