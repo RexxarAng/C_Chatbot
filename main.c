@@ -69,7 +69,8 @@ int main(int argc, char *argv[]) {
 			/* read the line */
 			printf("%s: ", chatbot_username());
 			fgets(input, MAX_INPUT, stdin);
-
+			if (!strchr(input, '\n'))     //newline does not exist
+				while (fgetc(stdin) != '\n');//discard until newline
 			/* split it into words */
 			inc = 0;
 			inv[inc] = strtok(input, delimiters);
@@ -147,6 +148,7 @@ void prompt_user(char *buf, int n, const char *format, ...) {
 	va_start(args, format);
 	printf("%s: ", chatbot_botname());
 	vprintf(format, args);
+	fflush(stdout);
 	printf(" ");
 	va_end(args);
 	printf("\n%s: ", chatbot_username());
@@ -159,7 +161,7 @@ void prompt_user(char *buf, int n, const char *format, ...) {
 }
 
 /*
- * Utility function for getting the substring by using the offset to loop through the original string.
+ * Utility function for getting the substring by using the offset to loop through the original string safely concatenating till the max buffer size.
  * out = a buffer to store the output of the substring
  * src = original string
  * src_size = number of characters in the string
@@ -169,13 +171,13 @@ void prompt_user(char *buf, int n, const char *format, ...) {
 void substring(char* out, char* src[], const size_t src_size, const size_t out_size, int offset) {
 	for (int i = offset; i < src_size; i++) {
 		// Check length
-		if (strlen(out) < out_size + 2) {
+		if (strlen(src[i]) < out_size - strlen(out)) {
 			strcat(out, src[i]);
 			// Check if last element
 			if (i != src_size - 1) {
 				strcat(out, " ");
 			}
-		}
+		} 
 		else {
 			strncat(out, src[i], out_size - strlen(out) - 1);
 		}

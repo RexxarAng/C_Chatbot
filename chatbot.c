@@ -270,7 +270,6 @@ int chatbot_do_question(int inc, char* inv[], char* response, int n) {
 			return 1;
 		}
 		substring(question, inv, inc, MAX_RESPONSE, 0);
-
 		// Capitalise first word in question
 		question[0] = toupper(question[0]);
 		char ans[MAX_RESPONSE];
