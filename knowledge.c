@@ -237,9 +237,10 @@ int knowledge_read(FILE* f) {
 		}
 
 		if (strchr(line, '=')) {
-			printf("%s\n", line);
+			//printf("%s\n", line);
 			strncpy(entity, strtok(line, "="), MAX_ENTITY);
 			strncpy(response, strtok(NULL, "="), MAX_RESPONSE);
+			response[strcspn(response, "\n")] = 0;
 			int result = knowledge_put(intent, entity, response);
 			if (result == KB_FOUND) {
 				no_of_responses++;
