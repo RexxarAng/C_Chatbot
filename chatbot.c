@@ -443,7 +443,7 @@ int chatbot_do_smalltalk(int inc, char *inv[], char *response, int n) {
 		snprintf(response, MAX_RESPONSE, formatted_response);
 		return 0;
 	}
-	if ((compare_token(inv[0], "tell") == 0 && compare_token(inv[1], "me") == 0) ||
+	if (compare_token(inv[0], "tell") == 0 ||
 		compare_token(inv[0], "joke") == 0 ||
 		compare_token(inv[0], "fact") == 0) {
 		int choice = 0;
